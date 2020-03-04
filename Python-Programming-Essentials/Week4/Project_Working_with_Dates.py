@@ -18,7 +18,21 @@ def days_in_month(year, month):
     Returns:
       The number of days in the input month.
     """
-    return 0
+    date_month = datetime.date(year, month, 1)
+
+    # Manual calculation of next month and next year. Special case when month is 12, as year must be change as well.
+    if date_month.month == 12:
+        next_month = 1
+        year += 1
+    else:
+        next_month = month + 1
+
+    date_next_month = datetime.date(year, next_month, 1)
+    
+    # compute the difference between the first day of the month - the first day of next month
+    number_of_days_in_month = date_next_month - date_month
+
+    return number_of_days_in_month.days
 
 def is_valid_date(year, month, day):
     """
@@ -66,3 +80,7 @@ def age_in_days(year, month, day):
 
 
 # Unit Tests
+# days_in_month
+print(days_in_month(2020,2))
+print(days_in_month(2020,12))
+print(days_in_month(2019,2))
