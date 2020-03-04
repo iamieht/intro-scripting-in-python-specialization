@@ -20,7 +20,8 @@ def days_in_month(year, month):
     """
     date_month = datetime.date(year, month, 1)
 
-    # Manual calculation of next month and next year. Special case when month is 12, as year must be change as well.
+    # Manual calculation of next month and next year. 
+    # Special case when month is 12, as year must be change as well.
     if date_month.month == 12:
         next_month = 1
         year += 1
@@ -45,7 +46,15 @@ def is_valid_date(year, month, day):
       True if year-month-day is a valid date and
       False otherwise
     """
-    return False
+    if year < datetime.MINYEAR or year > datetime.MAXYEAR:
+        return False
+    elif month < 1 or month > 12:
+        return False
+    # Checking wheter the day/month combination is valid
+    elif day <= 0 or day > days_in_month(year, month): 
+        return False
+    else:
+        return True
 
 def days_between(year1, month1, day1, year2, month2, day2):
     """
@@ -81,6 +90,15 @@ def age_in_days(year, month, day):
 
 # Unit Tests
 # days_in_month
-print(days_in_month(2020,2))
-print(days_in_month(2020,12))
-print(days_in_month(2019,2))
+#print(days_in_month(2020,2))
+#print(days_in_month(2020,12))
+#print(days_in_month(2019,2))
+#print(days_in_month(1400,1))
+
+# is_valid_date
+# print(is_valid_date(2020, 1, 1))
+# print(is_valid_date(2020, 2, 29))
+# print(is_valid_date(2019, 2, 29))
+# print(is_valid_date(9999, 1, 1))
+# print(is_valid_date(2020, -1, 1))
+#print(is_valid_date(1400, 1, 0))
