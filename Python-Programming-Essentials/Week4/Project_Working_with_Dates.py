@@ -71,7 +71,14 @@ def days_between(year1, month1, day1, year2, month2, day2):
       Returns 0 if either date is invalid or the second date is
       before the first date.
     """
-    return 0
+
+    if not is_valid_date(year1, month1, day1) or not is_valid_date(year2, month2, day2):
+        return 0
+    elif datetime.date(year1, month1, day1) > datetime.date(year2, month2, day2):
+        return 0
+    else:
+        difference = datetime.date(year2, month2, day2) - datetime.date(year1, month1, day1)
+        return difference.days
 
 def age_in_days(year, month, day):
     """
@@ -101,4 +108,17 @@ def age_in_days(year, month, day):
 # print(is_valid_date(2019, 2, 29))
 # print(is_valid_date(9999, 1, 1))
 # print(is_valid_date(2020, -1, 1))
-#print(is_valid_date(1400, 1, 0))
+# print(is_valid_date(1400, 1, 0))
+
+# days_between
+# Invalid dates
+print(days_between(2020, -1, 1, 2020, 1, 1))
+print(days_between(2020, 1, 1, 2020, -1, 1))
+print(days_between(2020, -1, 1, 2020, -1, 1))
+
+# Second date later than first date
+print(days_between(2020, 1, 1, 2019, 1, 1))
+
+# Valid scenario
+print(days_between(2019, 1, 1, 2020, 1, 1))
+print(days_between(2019, 1, 1, 2020, 2, 29))
