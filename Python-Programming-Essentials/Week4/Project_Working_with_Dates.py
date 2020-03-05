@@ -92,7 +92,14 @@ def age_in_days(year, month, day):
       Returns 0 if the input date is invalid or if the input
       date is in the future.
     """
-    return 0
+    today = datetime.date.today()
+
+    if not is_valid_date(year, month, day):
+        return 0
+    elif datetime.date(year, month, day) > today:
+        return 0
+    else:
+        return days_between(year, month, day, today.year, today.month, today.day)
 
 
 # Unit Tests
@@ -112,13 +119,18 @@ def age_in_days(year, month, day):
 
 # days_between
 # Invalid dates
-print(days_between(2020, -1, 1, 2020, 1, 1))
-print(days_between(2020, 1, 1, 2020, -1, 1))
-print(days_between(2020, -1, 1, 2020, -1, 1))
+# print(days_between(2020, -1, 1, 2020, 1, 1))
+# print(days_between(2020, 1, 1, 2020, -1, 1))
+# print(days_between(2020, -1, 1, 2020, -1, 1))
 
 # Second date later than first date
-print(days_between(2020, 1, 1, 2019, 1, 1))
+# print(days_between(2020, 1, 1, 2019, 1, 1))
 
 # Valid scenario
-print(days_between(2019, 1, 1, 2020, 1, 1))
-print(days_between(2019, 1, 1, 2020, 2, 29))
+# print(days_between(2019, 1, 1, 2020, 1, 1))
+# print(days_between(2019, 1, 1, 2020, 2, 29))
+
+# age_in_days
+# print(age_in_days(2020, 3, 7))
+# print(age_in_days(2020, -1, 0))
+# print(age_in_days(1977, 4, 10))
