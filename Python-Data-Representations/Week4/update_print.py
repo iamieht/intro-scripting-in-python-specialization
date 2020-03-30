@@ -17,12 +17,15 @@ def update_line(line):
     """
 
     # Strip left white space using built-in string method lstrip()
-
+    new_line = line.strip()
     # If line is print statement,  use the format() method to add insert parentheses
-
+    if new_line[:len(PRINT)] == PRINT:
+        spaces = ' ' * line.find(PRINT)
+        content = new_line[len(PRINT) + 1:]
+        return '{}print({})'.format(spaces, content)
     # Note that solution does not handle white space/comments after print statememt
 
-    return ""
+    return line
 
 # Some simple tests
 print(update_line(""))
