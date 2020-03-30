@@ -46,8 +46,11 @@ def update_pre_block(pre_block):
     Returns string corresponding to updated <pre> block with each line
     updated via process_line()
     """
-    
-    updated_block = ""
+    lines = pre_block.split("\n")
+    updated_block = update_line(lines[0])
+    for line in lines[1:]:
+        updated_block += "\n"
+        updated_block += update_line(line)
 
     return updated_block
 
