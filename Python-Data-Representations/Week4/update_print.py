@@ -81,21 +81,30 @@ def update_file(input_file_name, output_file_name):
     """
     
     # open file and read text in file as a string
-    pass
+    with open(input_file_name) as doc_file:
+        doc_text = doc_file.read()
 
     # split text in <pre> blocks and update using update_pre_block()
-
+    parts = doc_text.split(PREFIX)
+    updated_text = parts[0]
+    for part in parts[1:]:
+        updated_text += PREFIX
+        [pre_block, filler] = part.split(POSTFIX, 1)
+        updated_text += update_pre_block(pre_block)
+        updated_text += POSTFIX
+        updated_text += filler
     # Write the answer in the specified output file
-    
+    with  open(output_file_name, "w") as processed_file:
+        processed_file.write(updated_text)
 
 # A couple of test files
 update_file("table.html", "table_updated.html")
 update_file("docs.html", "docs_updated.html")
 
 # Import some code to check whether the computed files are correct
-##import examples3_file_diff as file_diff
-##file_diff.compare_files("table_updated.html", "table_updated_solution.html")
-##file_diff.compare_files("docs_updated.html", "docs_updated_solution.html")
+import examples3_file_diff as file_diff
+file_diff.compare_files("table_updated.html", "table_updated_solution.html")
+file_diff.compare_files("docs_updated.html", "docs_updated_solution.html")
 
 # Expected output
 ##table_updated.html and table_updated_solution.html are the same
