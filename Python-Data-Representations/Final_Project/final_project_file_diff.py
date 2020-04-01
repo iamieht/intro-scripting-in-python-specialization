@@ -19,6 +19,22 @@ def singleline_diff(line1, line2):
 
       Returns IDENTICAL if the two lines are the same.
     """
+
+    if len(line1) == len(line2):
+        for idx in range(len(line1)):
+            if line1[idx] != line2[idx]:
+                return idx
+    elif len(line1) > len(line2):
+        for idx in range(len(line2)):
+            if line2[idx] != line1[idx]:
+                return idx
+        return len(line2)
+    else:
+        for idx in range(len(line1)):
+            if line1[idx] != line2[idx]:
+                return idx
+        return len(line1)
+
     return IDENTICAL
 
 
@@ -94,8 +110,15 @@ print(singleline_diff("line1", "line2"))
 print(singleline_diff("line1", "line1"))
 print(singleline_diff("line223", "line2"))
 print(singleline_diff(" ", "line2"))
+print(singleline_diff('abc', 'abcd'))
 # Expected result
 # 4
 # -1
 # 5
 # 0
+# 3
+
+# singleline_diff_format
+print(singleline_diff_format('abc', 'abd', 2))
+# Expected result
+# 'abc\n==^\nabd\n'
