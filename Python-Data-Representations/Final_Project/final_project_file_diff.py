@@ -53,7 +53,13 @@ def singleline_diff_format(line1, line2, idx):
 
       If idx is not a valid index, then returns an empty string.
     """
-    return ""
+    if "\n" in line1 or "\r" in line1 or "\n" in line2 or "\r" in line2:
+        return ""
+    elif idx < 0 or idx > min(len(line1), len(line2)):
+        return ""
+    else:      
+        diff = idx * "=" + "^"
+        return '{0}\n{1}\n{2}\n'.format(line1, diff, line2)
 
 
 def multiline_diff(lines1, lines2):
