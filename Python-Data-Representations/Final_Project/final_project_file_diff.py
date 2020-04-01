@@ -74,6 +74,29 @@ def multiline_diff(lines1, lines2):
 
       Returns (IDENTICAL, IDENTICAL) if the two lists are the same.
     """
+
+    idx = 0
+    if len(lines1) == len(lines2):
+        for list_number in range(len(lines1)):
+            idx = singleline_diff(lines1[list_number], lines2[list_number])
+            if idx != IDENTICAL:
+                return (list_number, idx)
+    elif len(lines1) > len(lines2):
+        for list_number in range(len(lines2)):
+            idx = singleline_diff(lines2[list_number], lines1[list_number])
+            if idx != IDENTICAL:
+                return (list_number, idx)
+            
+        return (len(lines2), 0)
+    else:
+        for list_number in range(len(lines1)):
+            idx = singleline_diff(lines1[list_number], lines2[list_number])
+            if idx != IDENTICAL:
+                return (list_number, idx)
+            
+        return (len(lines1), 0)    
+ 
+
     return (IDENTICAL, IDENTICAL)
 
 
@@ -128,3 +151,19 @@ print(singleline_diff('abc', 'abcd'))
 print(singleline_diff_format('abc', 'abd', 2))
 # Expected result
 # 'abc\n==^\nabd\n'
+
+# multiline_diff
+print(multiline_diff(['a'], ['b']))
+#expected (0, 0)
+print(multiline_diff(['line1', 'line2'], ['line1', 'line2']))
+#expected (-1, -1)
+print(multiline_diff(['line1', 'line2'], ['line1', 'lne2']))
+#expected (1, 1)
+print(multiline_diff(['lines1', 'line2'], ['line1', 'line2']))
+#expected (0, 4)
+print(multiline_diff(['line1', 'line2'], ['line1', 'line2', 'line3']))
+#expected (2, 0)
+print(multiline_diff(['line1', 'line2', 'line3'], ['line1', 'line2']))
+#expected (2, 0)
+print(multiline_diff([], ['line']))
+#expected (0, 0)
