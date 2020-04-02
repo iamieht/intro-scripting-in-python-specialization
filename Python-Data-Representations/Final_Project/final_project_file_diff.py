@@ -112,7 +112,11 @@ def get_file_lines(filename):
       If the file does not exist or is not readable, then the
       behavior of this function is undefined.
     """
-    return []
+    with open(filename, 'r') as doc_file:
+        doc_text = doc_file.read()
+        doc_text = doc_text.splitlines()
+
+    return doc_text
 
 
 def file_diff_format(filename1, filename2):
