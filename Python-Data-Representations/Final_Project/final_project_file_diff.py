@@ -134,7 +134,18 @@ def file_diff_format(filename1, filename2):
       If either file does not exist or is not readable, then the
       behavior of this function is undefined.
     """
-    return ""
+    lines1 = get_file_lines(filename1)
+    lines2 = get_file_lines(filename2)
+
+    difference = multiline_diff(lines1, lines2)
+
+    if difference == (IDENTICAL, IDENTICAL):
+        return "No differences\n"
+    else:
+        return ('Line ' + str(difference[0]) + ':' + '\n' + 
+                singleline_diff_format(lines1[difference[0]], lines2[difference[0]], difference[1]))
+
+
 
 
 # Unit Tests
