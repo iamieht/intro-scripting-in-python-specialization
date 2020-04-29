@@ -36,7 +36,13 @@ def read_csv_as_list_dict(filename, separator, quote):
       corresponds to a row in the CSV file.  The dictionaries in the
       list map the field names to the field values for that row.
     """
-    return []
+    table = []
+    with open(filename, 'rt', newline='') as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=separator, quotechar=quote)
+        for row in csv_reader:
+            table.append(row)
+    
+    return table
 
 
 def read_csv_as_nested_dict(filename, keyfield, separator, quote):
