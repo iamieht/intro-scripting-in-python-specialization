@@ -27,9 +27,12 @@ def read_csv_file(file_name):
     Input: String corresponding to comma-separated  CSV file
     Output: Lists of lists consisting of the fields in the CSV file
     """
-       
-    return []
-
+    with open(file_name, "rt", newline='') as csv_file:
+        csv_table = []
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            csv_table.append(row)
+    return csv_table
 
 
 def write_csv_file(csv_table, file_name):
@@ -38,7 +41,10 @@ def write_csv_file(csv_table, file_name):
     Action: Write fields in csv_table into a comma-separated CSV file with the name file_name
     """
     
-    pass
+    with open(file_name, 'w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+        for row in csv_table:
+            csv_writer.writerow(row)
 
         
 def test_part1_code():
@@ -57,6 +63,10 @@ def test_part1_code():
     cancer_risk_copy = read_csv_file("cancer_risk05_v4_county_copy.csv")
     
     # Test whether two tables are the same
+    for row in range(len(cancer_risk_table)):
+        for col in range(len(cancer_risk_table[0])):
+            if cancer_risk_table[row][col] != cancer_risk_copy[row][col]:
+                print("Difference at", row, col, cancer_risk_table[row][col], cancer_risk_copy[row][col])
 
 test_part1_code()
 
