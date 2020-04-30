@@ -58,7 +58,12 @@ def read_csv_as_nested_dict(filename, keyfield, separator, quote):
       CSV file.  The inner dictionaries map the field names to the
       field values for that row.
     """
-    return {}
+    table = {}
+    with open(filename, 'rt', newline='') as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=separator, quotechar=quote)
+        for row in csv_reader:
+            table[row[keyfield]] = row
+    return table
 
 
 def write_csv_from_list_dict(filename, table, fieldnames, separator, quote):
