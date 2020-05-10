@@ -345,4 +345,4 @@ def test_baseball_statistics():
 # Make sure the following call to test_baseball_statistics is
 # commented out when submitting to OwlTest/CourseraTest.
 
-# test_baseball_statistics()
+#test_baseball_statistics()
