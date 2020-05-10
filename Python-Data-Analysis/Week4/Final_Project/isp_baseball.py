@@ -208,7 +208,14 @@ def compute_top_stats_year(info, formula, numplayers, year):
       Returns a list of strings for the top numplayers in the given year
       according to the given formula.
     """
-    return []
+    with open(info["battingfile"], newline='') as csvfile:
+        reader = csv.DictReader(csvfile,
+                                delimiter=info["separator"],
+                                quotechar=info["quote"])
+        
+        stats = filter_by_year(reader, year, info['yearid'])
+        
+        return lookup_player_names(info, top_player_ids(info, stats, formula, numplayers))
 
 
 ##
