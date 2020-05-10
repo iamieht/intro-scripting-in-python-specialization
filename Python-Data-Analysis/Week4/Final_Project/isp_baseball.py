@@ -233,7 +233,21 @@ def aggregate_by_player_id(statistics, playerid, fields):
       are dictionaries of aggregated stats.  Only the fields from the fields
       input will be aggregated in the aggregated stats dictionaries.
     """
-    return {}
+    aggregated_players = {}
+
+    for stat in statistics:
+        if stat[playerid] in aggregated_players:
+            for field in fields:
+                if field in aggregated_players[stat[playerid]]:
+                    aggregated_players[stat[playerid]][field] += int(stat[field])
+        else: 
+            temp_dict = {}           
+            for field in fields:                
+                temp_dict[playerid] = stat[playerid]
+                temp_dict[field] = int(stat[field])
+            aggregated_players[stat[playerid]] = temp_dict
+            
+    return aggregated_players
 
 
 def compute_top_stats_career(info, formula, numplayers):
