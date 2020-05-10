@@ -121,7 +121,14 @@ def filter_by_year(statistics, year, yearid):
       Returns a list of batting statistics dictionaries that
       are from the input year.
     """
-    return []
+    batting_stats = []
+
+    for value_dict in statistics:
+        if yearid in value_dict:
+            if int(value_dict.get(yearid)) == year:
+                batting_stats.append(value_dict)
+
+    return batting_stats
 
 
 def top_player_ids(info, statistics, formula, numplayers):
