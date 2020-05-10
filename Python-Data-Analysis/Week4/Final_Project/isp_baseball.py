@@ -259,7 +259,16 @@ def compute_top_stats_career(info, formula, numplayers):
                     computes a compound statistic
       numplayers  - Number of top players to return
     """
-    return []
+    with open(info["battingfile"], newline='') as csvfile:
+        reader = csv.DictReader(csvfile,
+                                delimiter=info["separator"],
+                                quotechar=info["quote"])        
+      
+        stats = aggregate_by_player_id(reader, info["playerid"], info["battingfields"])
+        
+        stat_list = [stats[stat] for stat in stats]
+            
+        return lookup_player_names(info, top_player_ids(info, stat_list, formula, numplayers))
 
 
 ##
