@@ -145,7 +145,24 @@ def top_player_ids(info, statistics, formula, numplayers):
       computed by formula, of the top numplayers players sorted in
       decreasing order of the computed statistic.
     """
-    return []
+    top_players = []
+    top_players_list = []
+    
+    for values in statistics:
+        key = "".join(values[info["playerid"]])
+        value = formula(info,values)
+        top_players.append((key,value))
+
+    for _ in range(numplayers):
+        max_val, max_player = 0, ""
+        for player in top_players:
+            if player[1] > max_val and player not in top_players_list:
+                max_val = player[1]
+                max_player = player[0]
+        top_players_list.append((max_player, max_val))
+
+    return top_players_list
+    
 
 
 def lookup_player_names(info, top_ids_and_stats):
