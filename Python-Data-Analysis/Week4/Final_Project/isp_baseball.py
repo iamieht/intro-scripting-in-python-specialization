@@ -150,8 +150,8 @@ def top_player_ids(info, statistics, formula, numplayers):
     
     for values in statistics:
         key = "".join(values[info["playerid"]])
-        value = formula(info,values)
-        top_players.append((key,value))
+        value = formula(info, values)
+        top_players.append((key, value))
 
     for _ in range(numplayers):
         max_val, max_player = 0, ""
@@ -177,7 +177,22 @@ def lookup_player_names(info, top_ids_and_stats):
       the input and "FirstName LastName" is the name of the player
       corresponding to the player ID in the input.
     """
-    return []
+    with open(info["masterfile"], newline='') as csvfile:
+        reader = csv.DictReader(csvfile,
+                                delimiter=info["separator"],
+                                quotechar=info["quote"])
+        
+        player_names, player_info = {}, []
+
+        for player in reader:
+            player_names[player[info["playerid"]]] = (player[info["firstname"]], 
+                                                      player[info["lastname"]])
+
+        for top_id in top_ids_and_stats:
+            player_info.append("{:0.3f} --- {} {}".format(top_id[1], 
+                                                          player_names[top_id[0]][0],
+                                                          player_names[top_id[0]][1]))
+        return player_info
 
 
 def compute_top_stats_year(info, formula, numplayers, year):
