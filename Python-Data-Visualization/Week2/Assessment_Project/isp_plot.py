@@ -50,8 +50,11 @@ def build_plot_values(gdpinfo, gdpdata):
     """
     data = []
     for year in range(gdpinfo.get("min_year"), gdpinfo.get("max_year")+1):
-      if year in gdpdata.keys():
-        data.append((year, gdpdata.get(year)))
+        if str(year) in gdpdata.keys():
+            try:
+                data.append((year, float(gdpdata.get(str(year)))))
+            except ValueError:
+                continue
     
     return data
 
