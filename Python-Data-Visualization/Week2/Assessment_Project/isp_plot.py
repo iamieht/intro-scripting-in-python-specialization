@@ -74,7 +74,26 @@ def build_plot_dict(gdpinfo, country_list):
       CSV file should still be in the output dictionary, but
       with an empty XY plot value list.
     """
-    return {}
+    data = {}
+    for country in country_list:
+        country_data = []
+
+        country_info = read_csv_as_nested_dict(gdpinfo.get("gdpfile"),
+                                               gdpinfo.get("country_name"),
+                                               gdpinfo.get("separator"),
+                                               gdpinfo.get("quote"))
+      
+        for year in range(gdpinfo.get("min_year"), gdpinfo.get("max_year")+1):
+            try:
+                print(year, country_info.get(country).get(str(year)))
+                country_data.append((int(year), float(country_info.get(country).get(str(year)))))
+            except ValueError:
+                continue
+            except AttributeError:
+                continue
+        data[country] = country_data
+    
+    return data
 
 
 def render_xy_plot(gdpinfo, country_list, plot_file):
@@ -92,8 +111,15 @@ def render_xy_plot(gdpinfo, country_list, plot_file):
       specified by gdpinfo for the countries in country_list.
       The image will be stored in a file named by plot_file.
     """
-    return
+    chart = pygal.XY()
+    chart.title = 'Plot of GDP for select countries spanning ' + str(gdpinfo.get("min_year")) \
+                                                      + ' to ' + str(gdpinfo.get("max_year"))
+    chart.y_title = 'GDP in current US dollars'
 
+    for country in country_list:
+        chart.add(country, build_plot_dict(gdpinfo, country_list).get(country))
+
+    chart.render_in_browser()
 
 def test_render_xy_plot():
     """
@@ -119,4 +145,4 @@ def test_render_xy_plot():
 # Make sure the following call to test_render_xy_plot is commented out
 # when submitting to OwlTest/CourseraTest.
 
-# test_render_xy_plot()
+#test_render_xy_plot()
