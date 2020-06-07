@@ -23,7 +23,16 @@ def reconcile_countries_by_name(plot_countries, gdp_countries):
       gdp_countries The set contains the country codes from
       plot_countries that were not found in gdp_countries.
     """
-    return {}, set()
+    country_codes = set()
+    country_data = dict()
+
+    for country in plot_countries:
+        if plot_countries.get(country) in gdp_countries:
+            country_data[country] = plot_countries.get(country)
+        else:
+            country_codes.add(country)
+    
+    return country_data, country_codes
 
 
 def build_map_dict_by_name(gdpinfo, plot_countries, year):
@@ -43,7 +52,27 @@ def build_map_dict_by_name(gdpinfo, plot_countries, year):
       codes from plot_countries that were found in the GDP data file, but
       have no GDP data for the specified year.
     """
-    return {}, set(), set()
+    country_codes_with_values = dict()
+    country_codes_no_found = set()
+    country_codes_no_data = set()
+
+    with open(gdpinfo.get("gdpfile"), 'r') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=gdpinfo.get("separator"),
+                                quotechar=gdpinfo.get("quote"))
+    
+        for data in reader:
+            for country in plot_countries:
+                if plot_countries.get(country) in data.values():
+                    try:
+                        country_codes_with_values[country] = math.log10(float(data.get(year)))
+                    except ValueError:
+                        country_codes_no_data.add(country)
+    
+    for country in plot_countries:
+        if not country in country_codes_with_values and not country in country_codes_no_data:
+            country_codes_no_found.add(country)
+    
+    return country_codes_with_values, country_codes_no_found, country_codes_no_data
 
 
 def render_world_map(gdpinfo, plot_countries, year, map_file):
