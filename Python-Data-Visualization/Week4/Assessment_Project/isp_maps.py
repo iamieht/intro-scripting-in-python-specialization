@@ -69,7 +69,19 @@ def reconcile_countries_by_code(codeinfo, plot_countries, gdp_countries):
       the codes with the exact same case as they have in
       plot_countries and gdp_countries.
     """
-    return {}, set()
+    country_codes = dict()
+    not_found_country_codes = set()
+
+    for country in plot_countries:
+        for country_code in gdp_countries.values():
+            if plot_countries.get(country) == country_code.get("Country Name"):
+                country_codes[country] = country_code.get("Country Code")
+    
+    for country in plot_countries:
+        if not country in country_codes:
+            not_found_country_codes.add(country)
+
+    return country_codes, not_found_country_codes
 
 
 def build_map_dict_by_code(gdpinfo, codeinfo, plot_countries, year):
