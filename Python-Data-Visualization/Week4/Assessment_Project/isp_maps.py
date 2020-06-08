@@ -147,7 +147,19 @@ def render_world_map(gdpinfo, codeinfo, plot_countries, year, map_file):
       Creates a world map plot of the GDP data in gdp_mapping and outputs
       it to a file named by svg_filename.
     """
-    return
+    worldmap_chart = pygal.maps.world.World()
+    worldmap_chart.title = 'GDP by country for ' + year + ' (log scale), unified by common' + \
+                           ' country Code'
+                           
+    gdp_datas = build_map_dict_by_code(gdpinfo, codeinfo, plot_countries, year)
+    
+    worldmap_chart.add('GDP For ' + year, gdp_datas[0])
+    worldmap_chart.add('Missing from World Bank Data', gdp_datas[1])
+    worldmap_chart.add('No GDP Data', gdp_datas[2])
+     
+    worldmap_chart.render_in_browser()
+    #worldmap_chart.render_to_file(map_file)
+
 
 
 def test_render_world_map():
@@ -191,4 +203,4 @@ def test_render_world_map():
 # Make sure the following call to test_render_world_map is commented
 # out when submitting to OwlTest/CourseraTest.
 
-# test_render_world_map()
+test_render_world_map()
