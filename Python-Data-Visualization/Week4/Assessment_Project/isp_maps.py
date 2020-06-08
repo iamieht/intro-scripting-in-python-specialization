@@ -101,7 +101,35 @@ def build_map_dict_by_code(gdpinfo, codeinfo, plot_countries, year):
       codes from plot_countries that were found in the GDP data file, but
       have no GDP data for the specified year.
     """
-    return {}, set(), set()
+    country_codes = dict()
+    plot_countries_2 = dict(plot_countries)
+    countries_no_data = set()
+
+    country_code_reader = read_csv_file(codeinfo.get("codefile"),
+                                        codeinfo.get("separator"),
+                                        codeinfo.get("quote"))
+    
+    plot_codes = country_code_reader[0].index(codeinfo.get("plot_codes"))
+    data_codes = country_code_reader[0].index(codeinfo.get("data_codes"))
+
+    with open(gdpinfo.get("gdpfile"), 'r') as csvfile:
+        gdp_reader = csv.DictReader(csvfile, delimiter=gdpinfo.get("separator"),
+                                    quotechar=gdpinfo.get("quote"))
+        
+        for data in gdp_reader:
+            for country_code in country_code_reader[1:]:
+                if data[gdpinfo.get("country_code")].lower() == country_code[data_codes].lower():
+                    plot_code = [country for country in plot_countries_2 \
+                                          if country_code[plot_codes].lower() == country.lower()]
+                    
+                    if not len(plot_code) == 0:
+                        try:
+                            country_codes[''.join(plot_code)] = math.log10(float(data.get(year)))
+                        except ValueError:
+                            countries_no_data.add(''.join(plot_code))
+                        del plot_countries_2[''.join(plot_code)]
+                  
+    return country_codes, set(plot_countries_2.keys()), countries_no_data
 
 def render_world_map(gdpinfo, codeinfo, plot_countries, year, map_file):
     """
